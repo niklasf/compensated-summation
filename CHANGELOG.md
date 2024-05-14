@@ -18,9 +18,14 @@ Types of changes:
 <!-- next-header -->
 ## [Unreleased]
 
+### Added
+
+- Benchmarks.
+
 ## [0.1.0] - 2024-05-14
 
 ### Added
+
 - `two_sum` and `fast_two_sum` algorithms.
 - `KahanBabuska` and `KahanBabuskaNeumaier` summation.
 
