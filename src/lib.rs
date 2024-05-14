@@ -213,7 +213,7 @@ where
     where
         I: Iterator<Item = V>,
     {
-        iter.fold(KahanBabuska::new(), |k, item| k + item)
+        iter.fold(KahanBabuska::new(), KahanBabuska::add)
     }
 }
 
@@ -341,7 +341,7 @@ where
     where
         I: Iterator<Item = V>,
     {
-        iter.fold(KahanBabuskaNeumaier::new(), |k, item| k + item)
+        iter.fold(KahanBabuskaNeumaier::new(), KahanBabuskaNeumaier::add)
     }
 }
 
