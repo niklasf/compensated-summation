@@ -21,6 +21,7 @@ Types of changes:
 ### Added
 
 - Benchmarks.
+- More tests.
 
 ### Changed
 

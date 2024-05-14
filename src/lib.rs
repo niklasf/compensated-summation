@@ -450,4 +450,61 @@ mod tests {
             2.0
         );
     }
+
+    fn kahan_babuska_sum<T, I>(iter: I) -> T
+    where
+        T: Float,
+        I: IntoIterator<Item = T>,
+    {
+        let mut s = T::zero();
+        let mut c = T::zero();
+        for x in iter {
+            let y = x + c;
+            let t = s + y;
+            c = y - (t - s);
+            s = t;
+        }
+        s + c
+    }
+
+    fn kahan_babuska_neumaier_sum<T, I>(iter: I) -> T
+    where
+        T: Float + AddAssign,
+        I: IntoIterator<Item = T>,
+    {
+        let mut s = T::zero();
+        let mut c = T::zero();
+        for x in iter {
+            let (t, d) = two_sum(s, x);
+            s = t;
+            c += d;
+        }
+        s + c
+    }
+
+    #[test]
+    fn test_correctness() {
+        use rand::prelude::*;
+        use rand_distr::LogNormal;
+        use rand_xoshiro::Xoshiro256PlusPlus;
+
+        for seed in 0..100 {
+            dbg!(seed);
+            let rng = Xoshiro256PlusPlus::seed_from_u64(seed);
+            let values: Vec<f64> = rng
+                .sample_iter(LogNormal::new(0.0, 40.0).unwrap())
+                .take(1_000)
+                .collect();
+
+            assert_eq!(
+                values.iter().sum::<KahanBabuska<_>>().total(),
+                kahan_babuska_sum(values.iter().cloned())
+            );
+
+            assert_eq!(
+                values.iter().sum::<KahanBabuskaNeumaier<_>>().total(),
+                kahan_babuska_neumaier_sum(values.iter().cloned())
+            );
+        }
+    }
 }
