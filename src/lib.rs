@@ -207,13 +207,20 @@ impl<T: Float> SubAssign<&T> for KahanBabuska<T> {
 
 impl<T: Float, V> Sum<V> for KahanBabuska<T>
 where
-    Self: Add<V, Output = Self>,
+    Self: AddAssign<V>,
 {
     fn sum<I>(iter: I) -> Self
     where
         I: Iterator<Item = V>,
     {
-        iter.fold(KahanBabuska::new(), KahanBabuska::add)
+        // This could be implemented as
+        // iter.fold(KahanBabuska::new(), KahanBabuska::add)
+        // however, using a for loop improves codegen (smaller assembly).
+        let mut sum = KahanBabuska::new();
+        for x in iter {
+            sum += x;
+        }
+        sum
     }
 }
 
@@ -335,13 +342,20 @@ impl<T: Float> SubAssign<&T> for KahanBabuskaNeumaier<T> {
 
 impl<T: Float, V> Sum<V> for KahanBabuskaNeumaier<T>
 where
-    Self: Add<V, Output = Self>,
+    Self: AddAssign<V>,
 {
     fn sum<I>(iter: I) -> Self
     where
         I: Iterator<Item = V>,
     {
-        iter.fold(KahanBabuskaNeumaier::new(), KahanBabuskaNeumaier::add)
+        // This could be implemented as
+        // iter.fold(KahanBabuskaNeumaier::new(), KahanBabuskaNeumaier::add)
+        // however, using a for loop improves codegen (smaller assembly).
+        let mut sum = KahanBabuskaNeumaier::new();
+        for x in iter {
+            sum += x;
+        }
+        sum
     }
 }
 

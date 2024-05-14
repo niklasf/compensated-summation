@@ -22,6 +22,14 @@ Types of changes:
 
 - Benchmarks.
 
+### Changed
+
+- `KahanBabuska: std::iter::Sum` and `KahanBabuskaNeumaier: std::iter::Sum` now require an
+  `AddAssign` bound instead of `Add`.
+
+  Furthermore, the implementation uses a `for` loop instead of `Iterator::fold`, which improves codegen
+  (smaller assembly, though similar performance).
+
 ## [0.1.0] - 2024-05-14
 
 ### Added
