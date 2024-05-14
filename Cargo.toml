@@ -1,6 +1,6 @@
 [package]
 name = "compensated-summation"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Federico Stra <stra.federico@gmail.com>"]
 description = "Compensated summation algorithms for better precision."
 license = "MIT" # https://spdx.org/licenses/
