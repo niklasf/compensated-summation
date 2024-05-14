@@ -1,0 +1,19 @@
+[package]
+name = "compensated-summation"
+version = "0.1.0"
+authors = ["Federico Stra <stra.federico@gmail.com>"]
+description = "Compensated summation algorithms for better precision."
+license = "MIT" # https://spdx.org/licenses/
+repository = "https://github.com/FedericoStra/compensated-summation"
+categories = ["algorithms", "mathematics"] # https://crates.io/category_slugs
+keywords = ["sum", "summation", "numerical-error", "precision", "Kahan"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num-traits = "0.2.19"
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "docsrs", "--html-in-header", "katex-header.html"]
+all-features = true
