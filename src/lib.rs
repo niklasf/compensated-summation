@@ -42,6 +42,36 @@ let iter = [0.1; 10].iter();
 assert_eq!(iter.sum::<KahanBabuska<_>>().total(), 1.0);
 ```
 
+# Caution!
+
+A word of caution: floating-point arithmetic is subtler than one may naively think!
+
+For example, the *exact sum* of the double precision ([`f64`]) floating-point numbers
+`0.1`, `0.2` and `-0.3` is **not zero**, not because of some numerical errors in the computation of
+arithmetic operations (I'm speaking of their exact mathematical sum, not `0.1 + 0.2 - 0.3`), but
+because `0.1`, `0.2` and `-0.3` do not represent what you may think. Mathematically, they are not
+$1/10$, $2/10=1/5$ and $-3/10$ respectively, because these are not
+[dyadic rational numbers](https://en.wikipedia.org/wiki/Dyadic_rational)
+hence cannot be represented exactly as [`f64`] floating-point numbers. Instead, `0.1`, `0.2` and `-0.3` are
+$3602879701896397/36028797018963968$, $3602879701896397/18014398509481984$ and
+$-5404319552844595/18014398509481984$ respectively, whose sum is $1/36028797018963968=2^{-55}$, which is equal to `f64::EPSILON / 8.0`.
+
+With this in mind, one can realize that in this case Kahan-Babuška-Neumaier computes the correct sum
+
+```
+use compensated_summation::*;
+assert_eq!([0.1, 0.2, -0.3].iter().sum::<KahanBabuskaNeumaier<f64>>().total(), f64::EPSILON / 8.0);
+```
+
+whereas both the naive summation and Kahan-Babuška do not
+
+```
+use compensated_summation::*;
+assert_eq!([0.1, 0.2, -0.3].iter().sum::<f64>(), f64::EPSILON / 4.0);
+assert_eq!([0.1, 0.2, -0.3].iter().sum::<KahanBabuska<f64>>().total(), 0.0);
+```
+
+Don't be fooled by the Kahan-Babuška result being `0.0`: from the `f64` perspective it is incorrect.
 */
 
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
