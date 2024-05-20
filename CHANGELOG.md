@@ -22,6 +22,10 @@ Types of changes:
 
 - Implementation of `two_sum` and, consequently, `KahanBabuskaNeumaier`.
 
+### Added
+
+- More tests.
+
 ## [0.2.0] - 2024-05-14
 
 ### Added

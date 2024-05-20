@@ -366,12 +366,42 @@ pub type KahanBabuška<T> = KahanBabuska<T>;
 pub type KahanBabuškaNeumaier<T> = KahanBabuskaNeumaier<T>;
 
 #[cfg(test)]
+pub mod dev;
+
+#[cfg(test)]
 mod tests {
     use crate::*;
 
     #[test]
+    fn test_two_sum() {
+        use rand::prelude::*;
+        use rand_distr::LogNormal;
+        use rand_xoshiro::Xoshiro256PlusPlus;
+
+        let mut rng = Xoshiro256PlusPlus::seed_from_u64(42);
+        let dist = LogNormal::new(0.0, 40.0).unwrap();
+
+        for _ in 0..1000 {
+            let a = rng.sample(dist);
+            let b = rng.sample(dist);
+            assert_eq!(two_sum(a, b), dev::abs_two_sum(a, b));
+        }
+    }
+
+    #[test]
     fn test_two_sub() {
-        assert_eq!(two_sub(0.1, 0.2), two_sum(0.1, -0.2));
+        use rand::prelude::*;
+        use rand_distr::LogNormal;
+        use rand_xoshiro::Xoshiro256PlusPlus;
+
+        let mut rng = Xoshiro256PlusPlus::seed_from_u64(42);
+        let dist = LogNormal::new(0.0, 40.0).unwrap();
+
+        for _ in 0..1000 {
+            let a = rng.sample(dist);
+            let b = rng.sample(dist);
+            assert_eq!(two_sub(a, b), two_sum(a, -b));
+        }
     }
 
     #[test]
@@ -451,37 +481,6 @@ mod tests {
         );
     }
 
-    fn kahan_babuska_sum<T, I>(iter: I) -> T
-    where
-        T: Float,
-        I: IntoIterator<Item = T>,
-    {
-        let mut s = T::zero();
-        let mut c = T::zero();
-        for x in iter {
-            let y = x + c;
-            let t = s + y;
-            c = y - (t - s);
-            s = t;
-        }
-        s + c
-    }
-
-    fn kahan_babuska_neumaier_sum<T, I>(iter: I) -> T
-    where
-        T: Float + AddAssign,
-        I: IntoIterator<Item = T>,
-    {
-        let mut s = T::zero();
-        let mut c = T::zero();
-        for x in iter {
-            let (t, d) = two_sum(s, x);
-            s = t;
-            c += d;
-        }
-        s + c
-    }
-
     #[test]
     fn test_correctness() {
         use rand::prelude::*;
@@ -489,7 +488,6 @@ mod tests {
         use rand_xoshiro::Xoshiro256PlusPlus;
 
         for seed in 0..100 {
-            dbg!(seed);
             let rng = Xoshiro256PlusPlus::seed_from_u64(seed);
             let values: Vec<f64> = rng
                 .sample_iter(LogNormal::new(0.0, 40.0).unwrap())
@@ -498,12 +496,20 @@ mod tests {
 
             assert_eq!(
                 values.iter().sum::<KahanBabuska<_>>().total(),
-                kahan_babuska_sum(values.iter().cloned())
+                dev::kahan_babuska_sum(values.iter().cloned())
             );
 
             assert_eq!(
                 values.iter().sum::<KahanBabuskaNeumaier<_>>().total(),
-                kahan_babuska_neumaier_sum(values.iter().cloned())
+                dev::kahan_babuska_neumaier_sum(values.iter().cloned())
+            );
+            assert_eq!(
+                values.iter().sum::<KahanBabuskaNeumaier<_>>().total(),
+                dev::kahan_babuska_neumaier_abs_sum(values.iter().cloned())
+            );
+            assert_eq!(
+                values.iter().sum::<KahanBabuskaNeumaier<_>>().total(),
+                dev::kahan_babuska_neumaier_abs_two_sum(values.iter().cloned())
             );
         }
     }
