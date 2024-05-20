@@ -18,6 +18,8 @@ Types of changes:
 <!-- next-header -->
 ## [Unreleased]
 
+## [0.3.0] - 2024-05-20
+
 ### Fixed
 
 - Implementation of `two_sum` and, consequently, `KahanBabuskaNeumaier`.
@@ -49,6 +51,7 @@ Types of changes:
 - `KahanBabuska` and `KahanBabuskaNeumaier` summation.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/FedericoStra/compensated-summation/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/FedericoStra/compensated-summation/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/FedericoStra/compensated-summation/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/FedericoStra/compensated-summation/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/FedericoStra/compensated-summation/releases/tag/v0.1.0
