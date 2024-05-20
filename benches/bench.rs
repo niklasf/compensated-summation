@@ -26,15 +26,43 @@ fn criterion_benchmark(c: &mut Criterion) {
             &values[0..n],
             |b, slice: &[f64]| b.iter(|| slice.iter().sum::<f64>()),
         );
+
         group.bench_with_input(
             BenchmarkId::new("Kahan-Babuska", n),
             &values[0..n],
             |b, slice: &[f64]| b.iter(|| slice.iter().sum::<KahanBabuska<f64>>().total()),
         );
+
+        group.bench_with_input(
+            BenchmarkId::new("kahan_babuska_sum", n),
+            &values[0..n],
+            |b, slice: &[f64]| b.iter(|| dev::kahan_babuska_sum(slice.iter().cloned())),
+        );
+
         group.bench_with_input(
             BenchmarkId::new("Kahan-Babuska-Neumaier", n),
             &values[0..n],
             |b, slice: &[f64]| b.iter(|| slice.iter().sum::<KahanBabuskaNeumaier<f64>>().total()),
+        );
+
+        group.bench_with_input(
+            BenchmarkId::new("kahan_babuska_neumaier_sum", n),
+            &values[0..n],
+            |b, slice: &[f64]| b.iter(|| dev::kahan_babuska_neumaier_sum(slice.iter().cloned())),
+        );
+        group.bench_with_input(
+            BenchmarkId::new("kahan_babuska_neumaier_abs_sum", n),
+            &values[0..n],
+            |b, slice: &[f64]| {
+                b.iter(|| dev::kahan_babuska_neumaier_abs_sum(slice.iter().cloned()))
+            },
+        );
+        group.bench_with_input(
+            BenchmarkId::new("kahan_babuska_neumaier_abs_two_sum", n),
+            &values[0..n],
+            |b, slice: &[f64]| {
+                b.iter(|| dev::kahan_babuska_neumaier_abs_two_sum(slice.iter().cloned()))
+            },
         );
     }
 

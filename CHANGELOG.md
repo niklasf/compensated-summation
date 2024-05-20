@@ -24,7 +24,7 @@ Types of changes:
 
 ### Added
 
-- More tests.
+- More tests and benchmarks.
 
 ## [0.2.0] - 2024-05-14
 

@@ -365,7 +365,18 @@ pub type KahanBabuška<T> = KahanBabuska<T>;
 /// Same as [`KahanBabuskaNeumaier`], but with correct spelling of the second surname.
 pub type KahanBabuškaNeumaier<T> = KahanBabuskaNeumaier<T>;
 
-#[cfg(test)]
+/// This module is for development purposes only!
+///
+/// It provides additional functions and alternative implementations used in testing and benchmarking.
+///
+/// **DO NOT RELY ON IT!**
+///
+/// Initially this module was gated by `[cfg(test)]`.
+/// However, some of these functions turned out to be useful also in benchmarking and
+/// to analyze the generated assembly, hence needed a way to be be exported outside of
+/// the crate. This is the reason why this module is now public and gated by
+/// `#[cfg(any(test, feature = "dev"))]`.
+#[cfg(any(test, feature = "dev"))]
 pub mod dev;
 
 #[cfg(test)]

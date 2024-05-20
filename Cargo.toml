@@ -11,12 +11,16 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+dev = []
+
 [lib]
 bench = false
 
 [[bench]]
 name = "bench"
 harness = false
+required-features = ["dev"]
 
 [dependencies]
 num-traits = "0.2.19"

@@ -34,7 +34,7 @@ where
 }
 
 /// Alternative implementation of `Iterator::sum::<KahanBabuskaNeumaier<_>>().total()`
-/// using and absolute value comparison.
+/// using an absolute value comparison.
 pub fn kahan_babuska_neumaier_abs_sum<T, I>(iter: I) -> T
 where
     T: Float + AddAssign,
