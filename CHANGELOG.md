@@ -18,6 +18,10 @@ Types of changes:
 <!-- next-header -->
 ## [Unreleased]
 
+### Fixed
+
+- Implementation of `two_sum` and, consequently, `KahanBabuskaNeumaier`.
+
 ## [0.2.0] - 2024-05-14
 
 ### Added

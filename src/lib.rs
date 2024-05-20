@@ -31,7 +31,7 @@ let mut sum = KahanBabuskaNeumaier::new();
 sum += 0.1;
 sum += 0.2;
 sum -= 0.3;
-assert_eq!(sum.total(), 0.0);
+assert_eq!(sum.total(), f64::EPSILON / 8.0);
 ```
 
 An iterator of floating-point numbers can be conveniently summed via its [`Iterator::sum()`] method, specifying the desired algorithm.
@@ -59,7 +59,7 @@ use std::ops::{Add, AddAssign, Sub, SubAssign};
 pub fn two_sum<T: Float>(a: T, b: T) -> (T, T) {
     let s = a + b;
     let aʹ = s - b;
-    let bʹ = s - a;
+    let bʹ = s - aʹ;
     let δa = a - aʹ;
     let δb = b - bʹ;
     let t = δa + δb;
@@ -70,7 +70,7 @@ pub fn two_sum<T: Float>(a: T, b: T) -> (T, T) {
 fn two_sub<T: Float>(a: T, b: T) -> (T, T) {
     let s = a - b;
     let aʹ = s + b;
-    let bʹ = a - s;
+    let bʹ = aʹ - s;
     let δa = a - aʹ;
     let δb = b - bʹ;
     let t = δa - δb;
@@ -240,7 +240,7 @@ where
 /// sum += 0.1;
 /// sum += 0.2;
 /// sum -= 0.3;
-/// assert_eq!(sum.total(), 0.0);
+/// assert_eq!(sum.total(), f64::EPSILON / 8.0);
 /// ```
 ///
 /// In addition, [`KahanBabuskaNeumaier`] implements the [`std::iter::Sum`](#impl-Sum<V>-for-KahanBabuskaNeumaier<T>) trait, which means that an iterator of floating-point numbers can be summed either by calling [`KahanBabuskaNeumaier::sum()`] directly
@@ -249,7 +249,7 @@ where
 /// # use compensated_summation::KahanBabuskaNeumaier;
 /// use std::iter::Sum; // remember to import the trait
 /// let iter = [0.1, 0.2, -0.3].iter();
-/// assert_eq!(KahanBabuskaNeumaier::sum(iter).total(), 0.0);
+/// assert_eq!(KahanBabuskaNeumaier::sum(iter).total(), f64::EPSILON / 8.0);
 /// ```
 ///
 /// or by using its [`Iterator::sum()`] method
@@ -257,7 +257,7 @@ where
 /// ```
 /// # use compensated_summation::KahanBabuskaNeumaier;
 /// let iter = [0.1, 0.2, -0.3].iter();
-/// assert_eq!(iter.sum::<KahanBabuskaNeumaier<_>>().total(), 0.0);
+/// assert_eq!(iter.sum::<KahanBabuskaNeumaier<_>>().total(), f64::EPSILON / 8.0);
 /// ```
 #[derive(Clone, Debug, PartialEq)]
 pub struct KahanBabuskaNeumaier<T> {
