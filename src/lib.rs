@@ -177,6 +177,12 @@ impl<T: Float> KahanBabuska<T> {
     }
 }
 
+impl<T: Float> Default for KahanBabuska<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: Float> Add<T> for KahanBabuska<T> {
     type Output = Self;
     fn add(mut self, rhs: T) -> Self::Output {
@@ -309,6 +315,12 @@ impl<T: Float> KahanBabuskaNeumaier<T> {
     /// Get the estimated total sum.
     pub fn total(&self) -> T {
         self.sum + self.comp
+    }
+}
+
+impl<T: Float> Default for KahanBabuskaNeumaier<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
